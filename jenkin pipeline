@@ -1,0 +1,50 @@
+pipeline {
+    agent { label 'priya' }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/thosarpriyanka8605/question-paper-project.git'
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                sh '''
+                    cd backend
+                    docker build -t question-paper-backend .
+                '''
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                sh '''
+                    cd frontend
+                    docker build -t question-paper-frontend .
+                '''
+            }
+        }
+
+        stage('Run Application') {
+            steps {
+                sh '''
+                    docker compose down || true
+                    docker compose up -d --build
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Question Paper Application is running successfully!'
+        }
+
+        failure {
+            echo 'Question Paper Application failed. Check Console Output.'
+        }
+    }
+}
