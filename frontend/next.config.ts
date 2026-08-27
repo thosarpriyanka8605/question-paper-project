@@ -2,6 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  allowedDevOrigins: ["3.111.246.48", "172.31.37.177"],
+  turbopack: {
+    root: __dirname,
+  },
   images: {
     remotePatterns: [
       {
